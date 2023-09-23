@@ -15,14 +15,15 @@ struct ray
 
     Vec3Dd origin;
     Vec3Dd direction;
+    int remaining_depth = 100;
 };
 
 struct ray_intersection
 {
     Vec3Dd location;
-    Vec3Dd direction;
     Vec3Dd normal;
     Vec2d texcoord;
-    double t;
     std::shared_ptr<material> mat;
+    ray r;
+    double t;
 };

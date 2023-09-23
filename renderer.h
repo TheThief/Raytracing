@@ -55,7 +55,7 @@ public:
 					auto pixel_center = viewport_upper_left + ((x + random_double()) * pixel_delta_u) + ((y + random_double()) * pixel_delta_v);
 					auto ray_direction = pixel_center - cam.origin;
 					ray r(cam.origin, ray_direction);
-					pixel_colour += ray_colour(sc, r);
+					pixel_colour += sc.ray_colour(r);
 				}
 				pixel_colour /= (float)num_samples;
 
@@ -64,31 +64,5 @@ public:
 		}
 
 		stbi_write_png("output.png", image_width, image_height, 4, image.data(), image.stride(0) * 4);
-	}
-
-private:
-
-	fRGBA ray_colour(const scene& sc, const ray& r)
-	{
-		auto t = sc.ray_intersect(r);
-		return *t.and_then([&](const ray_intersection& ri) -> std::optional<fRGBA>
-			{
-				Vec3Dd N = ri.normal;
-				fRGBA C = ri.mat->sample(ri);
-				Vec3Dd R = r.direction - 2 * dot_product(r.direction, N) * N;
-				return C * ray_colour(sc, { ri.location + 0.001 * R, R });
-			}).or_else([&]() -> std::optional<fRGBA>
-			{
-				Vec3Dd unit_direction = normalize_vector(r.direction);
-
-				//float y = 0.5f * ((float)unit_direction.get_y() + 1.0f);
-				//return Lerp(fRGBA(1.0f, 1.0f, 1.0f), fRGBA(0.5f, 0.7f, 1.0f), y);
-
-				double yaw = atan2(unit_direction.get_z(), unit_direction.get_x()) * (std::numbers::inv_pi / 2) + 0.5;
-				double pitch = asin(unit_direction.get_y()) * std::numbers::inv_pi * 2;
-
-				auto sample = sc.sky_material->sample({ .texcoord = {yaw, 0.5 - pitch * 0.5} });
-				return sample;
-			});
 	}
 };

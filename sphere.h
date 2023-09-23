@@ -39,8 +39,9 @@ public:
             .location = location,
             .normal = normal,
             .texcoord = Vec2d(normal[0] + 1, normal[1] + 1) * 0.5,
+            .mat = mat,
+            .r = r,
             .t = t,
-            .mat = mat
         };
     }
 
