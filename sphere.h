@@ -34,7 +34,7 @@ public:
         }
 
         Vec3Dd location = r.at(t);
-        Vec3Dd normal = normalize_vector(location - center);
+        Vec3Dd normal = (location - center) / radius;
         return ray_intersection{
             .location = location,
             .normal = normal,

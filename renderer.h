@@ -19,6 +19,7 @@ public:
 	int image_width = 100;  // Rendered image width in pixel count
 	int image_height = 100; // Rendered image height
 	int num_samples = 1;
+	int recursion_depth = 10;
 
 	void render(const camera& cam, const scene& sc)
 	{
@@ -54,7 +55,7 @@ public:
 				{
 					auto pixel_center = viewport_upper_left + ((x + random_double()) * pixel_delta_u) + ((y + random_double()) * pixel_delta_v);
 					auto ray_direction = pixel_center - cam.origin;
-					ray r(cam.origin, ray_direction);
+					ray r(cam.origin, ray_direction, recursion_depth);
 					pixel_colour += sc.ray_colour(r);
 				}
 				pixel_colour /= (float)num_samples;

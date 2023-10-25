@@ -74,7 +74,7 @@ public:
 			fmodulo(coords, 1.0) * Vec2d(size_x, size_y));
 		const Vec4i ic = truncate_to_int32(scaled_coords);
 		const Vec4i ic2 = truncate_to_int32(ceil(scaled_coords));
-		const Vec2d fc = fraction(scaled_coords);
+		const Vec2d fc = scaled_coords - truncate(scaled_coords);
 
 		const auto view = as_view();
 		return Lerp(
